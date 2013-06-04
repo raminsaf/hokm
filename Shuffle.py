@@ -30,7 +30,6 @@ class RaminShuffler(Shuffler):
     return cards
 
   def shuffleAt(self, cards, cut):
-    print("CUTTING AT CARD %s" % cut)
     cut_1 = cards[cut:]  
     cut_2 = cards[:cut]
     outcards = [] 
@@ -39,13 +38,13 @@ class RaminShuffler(Shuffler):
       outcards.append(cut_2[0])
       cut_1.remove(cut_1[0])
       cut_2.remove(cut_2[0])
-    #print("EXITING THE LOOP cut_1 or cut_2 should be empty, joining with both")
+    #EXITING THE LOOP cut_1 or cut_2 should be empty, joining with both
     outcards += cut_1
     outcards += cut_2
-    #print("NOW CUT IN HALF")
-    cut = len(cards) // 2
-    cut_1 = outcards[cut:]  
-    cut_2 = outcards[:cut]
-    outcards = cut_1 + cut_2
+    #LAST CUT IN HALF
+    #cut = len(cards) // 2
+    #cut_1 = outcards[cut:]  
+    #cut_2 = outcards[:cut]
+    #outcards = cut_1 + cut_2
     return outcards
 
