@@ -6,45 +6,53 @@ class Deck:
   """Deck Interface/Abstract Base class:
   listing the methods Decks are expected to supply."""
   def __init__(self, cards, shuffler):
-    self._cards = cards
     self._cards_dealt = []
-    self._cards_remaining = cards[:]
+    self._cards = cards[:]
     self._shuffler = shuffler
 
   # Deal these many cards
   def dealCards(self, count):
-    cut = self._cards_remaining[:count]
-    self._cards_remaining = self._cards_remaining[count:]
+    cut = self._cards[:count]
+    self._cards = self._cards[count:]
     self._cards_dealt.append(cut)
     return cut
 
   def shuffle(self):
-    self._cards_remaining = self._shuffler.random_shuffle(self._cards_remaining)
+    self._cards = self._shuffler.random_shuffle(self._cards)
   
   def getCards(self):
     return self._cards
-  
-  def getCardsRemaining(self):
-    return self._cards_remaining
   
   def getCardsDealt(self):
     return self._cards_dealt
   
   def resetCards(self):
+    self._cards = self_cards + self._cards_dealt
     self._cards_dealt = []
-    self._cards_ramaining = cards[:]
   
-  def printCut(self, cut):
-    for card in cut:
-      print card.toString() + ", ",
-    print ""
+  #TODO: Can this move somewhere else?
+  def order(self):
+    suitmap = { suit:[] for suit in Suit.getSuits() }
+    for card in self._cards:
+      suitmap[card.getSuit()].append(card)
+    self._cards = []
+    for suit in Suit.getSuits():
+      self._cards += suitmap[suit]
+  
+  #TODO: Can this move somewhere else?
+  def getCardsBySuit(self, suit):
+    return [card for card in self._cards if card.getSuit() == suit]
   
   def printDeck(self):
     print "============ %d CARDS ============" % len(self._cards)
-    self.printCut(self._cards_remaining)
+    for card in self._cards:
+      print card.toString() + ", ",
+    print ""
     print "=================================="
 
-
+class Hand(Deck):
+  pass
+  
 class HokmDeckFactory(object):
   @staticmethod
   def getHokmDeck(shuffler):
@@ -54,4 +62,10 @@ class HokmDeckFactory(object):
 deck = HokmDeckFactory.getHokmDeck(RaminShuffler())
 deck.printDeck()
 deck.shuffle()
+deck.printDeck()
+hearts = deck.getCardsBySuit(Suit.HEARTS)
+print "HEARTS: %d Cards" % len(hearts)
+for card in hearts:
+  card.printCard()
+deck.order()
 deck.printDeck()
